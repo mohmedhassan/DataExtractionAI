@@ -1,3 +1,6 @@
+import { File } from "node:buffer";
+globalThis.File = File;
+
 import express from "express";
 import multer from "multer";
 import OpenAI from "openai";
