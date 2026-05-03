@@ -92,7 +92,7 @@ app.post("/analyze", upload.array("files", 10), async (req, res) => {
       uploadedFiles.push(f.id);
     }
 
-    const response = await openai.responses.create({
+  /*  const response = await openai.responses.create({
       model: "gpt-5.4",
       input: [
         {
@@ -227,11 +227,11 @@ app.post("/analyze", upload.array("files", 10), async (req, res) => {
           ]
         }
       ]
-    });
+    });*/
 
     // clean JSON
-   let text = response.output_text;
-		/*let text = `{
+  /* let text = response.output_text;*/
+		let text = `{
   "company_name": "شركة الجزيرة للاستيراد والتصدير",
   "financial_year": "2023",
   "commercial_register": "24040",
@@ -310,7 +310,7 @@ app.post("/analyze", upload.array("files", 10), async (req, res) => {
     "total_expenses": [155000, 110000, 100000],
     "net_profit_loss_is": [1075000, 770000, 530000]
   }
-}`;*/
+}`;
 	console.log(text);
     let clean = text.replace(/```json|```/g, "").trim();
 
