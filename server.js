@@ -79,6 +79,7 @@ const autoFix = (item) => {
    API
 ---------------------------*/
 
+
 app.post("/analyze", upload.array("files", 10), async (req, res) => {
   try {
     const files = req.files;
@@ -92,7 +93,7 @@ app.post("/analyze", upload.array("files", 10), async (req, res) => {
       uploadedFiles.push(f.id);
     }
 
-  /*  const response = await openai.responses.create({
+   /* const response = await openai.responses.create({
       model: "gpt-5.4",
       input: [
         {
@@ -230,7 +231,7 @@ app.post("/analyze", upload.array("files", 10), async (req, res) => {
     });*/
 
     // clean JSON
-  /* let text = response.output_text;*/
+   /*let text = response.output_text;*/
 		let text = `{
   "company_name": "شركة الجزيرة للاستيراد والتصدير",
   "financial_year": "2023",
@@ -316,6 +317,97 @@ app.post("/analyze", upload.array("files", 10), async (req, res) => {
 
     res.setHeader("Content-Type", "text/plain; charset=utf-8");
 	res.json(JSON.parse(clean));
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error");
+  }
+});
+
+
+app.post("/Extract_PDF", upload.array("files", 1), async (req, res) => {
+  try {
+    const files = req.files;
+    const uploadedFiles = [];
+
+    for (const file of files) {
+      const f = await openai.files.create({
+        file: fs.createReadStream(file.path),
+        purpose: "assistants"
+      });
+
+      uploadedFiles.push(f.id);
+    }
+
+    const response = await openai.responses.create({
+      model: "gpt-5.4",
+      input: [
+        {
+          role: "user",
+          content: [
+            {
+              type: "input_text",
+             text: `
+استخرج البيانات من ملف PDF المرفق وأرجع النتيجة بصيغة JSON فقط.
+
+ممنوع تكتب أي شرح.
+ممنوع تكتب markdown.
+ممنوع تكتب \`\`\`json.
+ممنوع تكتب أي نص قبل أو بعد JSON.
+لازم أول حرف في الرد يكون {
+ولازم آخر حرف في الرد يكون }
+
+لو معلومة غير موجودة اتركها فارغة "".
+لو الحقل array وغير موجود ارجعه [].
+لا تخمن أي بيانات غير موجودة في الملف.
+
+ارجع بنفس هذا الشكل فقط:
+
+{
+  "companyName": "",
+  "address": "",
+  "phone": [],
+  "email": [],
+  "taxNumber": "",
+  "ComReg": "",
+  "companySection": "",
+  "name": [],
+  "role": [],
+  "boardSection": "",
+  "shareBoardName": [],
+  "countArrows": [],
+  "amountArrows": [],
+  "amountpres": [],
+  "sharememersSection": "",
+  "capitalAuth": "",
+  "capitalPaid": "",
+  "employees": "",
+  "customerName": [],
+  "customerPhone": [],
+  "customerDisc": [],
+  "supplierName": [],
+  "supplierPhone": [],
+  "supplierDisc": []
+}
+`
+            },
+            ...uploadedFiles.map(id => ({
+              type: "input_file",
+              file_id: id
+            }))
+          ]
+        }
+      ]
+    });
+
+    let text = response.output_text;
+
+    console.log(text);
+
+    let clean = text.replace(/```json|```/g, "").trim();
+
+    res.setHeader("Content-Type", "application/json; charset=utf-8");
+    res.json(JSON.parse(clean));
 
   } catch (err) {
     console.error(err);
