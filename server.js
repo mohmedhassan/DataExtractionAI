@@ -421,12 +421,12 @@ app.get("/ping", (req, res) => {
 ---------------------------*/
 const PORT = process.env.PORT || 3000;
 
-const server = app.listen(process.env.PORT, () =>
+const server = app.listen(PORT, () =>
   console.log("🚀 Server running on port", PORT)
 );
 
 
 // 3 minutes
-/*server.requestTimeout = 180000;
+server.requestTimeout = 180000;
 server.headersTimeout = 185000;
-server.keepAliveTimeout = 65000;*/
+server.keepAliveTimeout = 65000;
