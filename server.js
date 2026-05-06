@@ -81,7 +81,7 @@ const autoFix = (item) => {
 ---------------------------*/
 
 
-app.post("/analyze", upload.array("files", 10), async (req, res) => {
+app.post("/analyze", async (req, res) => {
   try {
    /* const files = req.files;
 
