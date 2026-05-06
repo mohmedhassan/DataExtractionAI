@@ -332,8 +332,7 @@ app.post("/analyze", upload.array("files", 10), async (req, res) => {
 
 
 app.post("/extract_pdf", upload.array("files", 1), async (req, res) => {
-    req.setTimeout(120000);  // ← أضف السطر ده أول حاجة
-    res.setTimeout(120000);  // ← والسطر ده
+
   try {
     const files = req.files;
     const uploadedFiles = [];
@@ -399,6 +398,7 @@ app.post("/extract_pdf", upload.array("files", 1), async (req, res) => {
 }
 `
             },
+            
             ...uploadedFiles.map(id => ({
               type: "input_file",
               file_id: id
@@ -406,7 +406,11 @@ app.post("/extract_pdf", upload.array("files", 1), async (req, res) => {
           ]
         }
       ]
-    });
+      
+    },
+  {
+    timeout: 120000
+  });
 
     let text = response.output_text;
 
@@ -426,7 +430,13 @@ app.post("/extract_pdf", upload.array("files", 1), async (req, res) => {
 /* --------------------------
    RUN
 ---------------------------*/
+const PORT = process.env.PORT || 3000;
 
-app.listen(process.env.PORT, () =>
+app.listen(PORT, () =>
   console.log("🚀 Server running on port", process.env.PORT)
 );
+
+// 3 minutes
+server.requestTimeout = 180000;
+server.headersTimeout = 185000;
+server.keepAliveTimeout = 65000;
