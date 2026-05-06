@@ -406,6 +406,10 @@ app.post("/extract_pdf", upload.array("files", 1), async (req, res) => {
     jobs[jobId] = { status: "error", error: err.message };
   }
 });
+
+app.get("/ping", (req, res) => {
+  res.json({ ok: true });
+});
 /* --------------------------
    RUN
 ---------------------------*/
