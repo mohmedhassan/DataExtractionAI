@@ -12,13 +12,8 @@ import cors from "cors";
 dotenv.config();
 
 const app = express();
-app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use(cors());
 
-app.options('*', cors());
 
 const openai = new OpenAI({
   apiKey:process.env.OPENAI_API_KEY
@@ -432,9 +427,10 @@ app.post("/extract_pdf", upload.array("files", 1), async (req, res) => {
 ---------------------------*/
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () =>
-  console.log("🚀 Server running on port", process.env.PORT)
+const server = app.listen(PORT, () =>
+  console.log("🚀 Server running on port", PORT)
 );
+
 
 // 3 minutes
 server.requestTimeout = 180000;
