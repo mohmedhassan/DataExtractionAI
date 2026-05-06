@@ -83,7 +83,7 @@ const autoFix = (item) => {
 
 app.post("/analyze", upload.array("files", 10), async (req, res) => {
   try {
-    const files = req.files;
+   /* const files = req.files;
 
     const uploadedFiles = [];
     for (const file of files) {
@@ -92,7 +92,7 @@ app.post("/analyze", upload.array("files", 10), async (req, res) => {
         purpose: "assistants"
       });
       uploadedFiles.push(f.id);
-    }
+    }*/
 
     /* const response = await openai.responses.create({
        model: "gpt-5.4",
