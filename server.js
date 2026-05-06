@@ -79,9 +79,106 @@ const autoFix = (item) => {
 /* --------------------------
    API
 ---------------------------*/
+app.post("/analyze", upload.array("files", 10), async (req, res) => {
+  try {
+    console.log("✅ /analyze called");
+    console.log("Files:", req.files?.length || 0);
 
+    let text = `{
+      "company_name": "شركة الجزيرة للاستيراد والتصدير",
+    "financial_year": "2023",
+    "commercial_register": "24040",
+    "years": ["2023", "2022", "2021"],
+    "sales": [4920000, 3520000, 2510000],
+    "gross_profit": [1230000, 880000, 630000],
+    "net_profit": [1075000, 770000, 530000],
+    "total_assets": [1710000, 1190000, 1135000],
+    "total_liabilities": [250000, 220000, 200000],
+    "total_equity": [1400000, 920000, 885000],
+    "current_assets": [1560000, 1010000, 925000],
+    "current_liabilities": [250000, 220000, 200000],
+    "cash_flow_from_operations": [605000, 740000, -40000],
+    "roe": ["92.8%", "85.4%", "85.4%"],
+    "roa": ["74.3%", "66.3%", "66.3%"],
+    "leverage": ["17.9%", "23.9%", "22.6%"],
+    "balance_sheet": {
+    "cash": [150000, 130000, 125000],
+    "inventories": [1050000, 540000, 470000],
+    "accounts_receivable_debtors": [360000, 340000, 330000],
+    "cash_collateral": [null, null, null],
+    "prepaid_expenses": [null, null, null],
+    "others_current_assets": [null, null, null],
+    "total_current_assets": [1560000, 1010000, 925000],
+    "buildings": [300000, 300000, 300000],
+    "intangible_assets": [null, null, null],
+    "accumulated_depreciation": [150000, 120000, 90000],
+    "lands": [null, null, null],
+    "machinery_equipment": [null, null, null],
+    "vehicles": [null, null, null],
+    "office_furniture": [null, null, null],
+    "properties_under_development": [null, null, null],
+    "others_fixed_assets": [null, null, null],
+    "total_fixed_assets": [150000, 180000, 210000],
+    "total_assets_bs": [1710000, 1190000, 1135000],
+    "liabilities": [250000, 220000, 200000],
+    "bank_overdraft": [null, null, null],
+    "accounts_payable": [250000, 220000, 200000],
+    "current_portion_term_loan": [null, null, null],
+    "accrued_expenses": [null, null, null],
+    "advance_payments": [null, null, null],
+    "others_current_liabilities": [null, null, null],
+    "total_current_liabilities": [250000, 220000, 200000],
+    "non_current_portion_term_loan": [null, null, null],
+    "notes_payables": [null, null, null],
+    "partners_loans": [null, null, null],
+    "others_long_term": [null, null, null],
+    "total_long_term_liabilities": [null, null, null],
+    "owners_equity": [1400000, 920000, 885000],
+    "shareholders_current_account": [274000, 99000, 304000],
+    "current_year_net_profit_loss": [1075000, 770000, 530000],
+    "retained_earnings": [null, null, null],
+    "reserves": [null, null, null],
+    "legal_reserve": [null, null, null],
+    "other_equity": [null, null, null],
+    "paid_up_capital": [51000, 51000, 51000],
+    "total_equity_bs": [1400000, 920000, 885000],
+    "total_liabilities_equity": [1710000, 1190000, 1135000],
+    "difference": [0, 0, 0]
+  },
+  "income_statement": {
+    "period": ["12 months", "12 months", "12 months"],
+    "year": ["2023", "2022", "2021"],
+    "total_sales_revenues": [4920000, 3520000, 2510000],
+    "cogs": [3690000, 2640000, 1880000],
+    "gross_profit_is": [1230000, 880000, 630000],
+    "sga_expenses": [123000, 79000, 70000],
+    "depreciation_industrial": [null, null, null],
+    "depreciation_administration": [30000, 30000, 30000],
+    "interest_revenue": [null, null, null],
+    "interest_expenses": [null, null, null],
+    "other_expenses": [null, null, null],
+    "taxes": [2000, 1000, null],
+    "other_revenues": [null, null, null],
+    "provisions": [null, null, null],
+    "total_expenses": [155000, 110000, 100000],
+    "net_profit_loss_is": [1075000, 770000, 530000]
+      }
+    }`;
 
-app.post("/analyze", async (req, res) => {
+    const clean = text.replace(/```json|```/g, "").trim();
+
+    return res.status(200).json(JSON.parse(clean));
+
+  } catch (err) {
+    console.error("❌ /analyze error:", err);
+    return res.status(500).json({
+      error: true,
+      message: err.message
+    });
+  }
+});
+
+/*app.post("/analyze", async (req, res) => {
   try {
    /* const files = req.files;
 
@@ -229,10 +326,10 @@ app.post("/analyze", async (req, res) => {
            ]
          }
        ]
-     });*/
+     });
 
     // clean JSON
-    /*let text = response.output_text;*/
+    let text = response.output_text;
     let text = `{
   "company_name": "شركة الجزيرة للاستيراد والتصدير",
   "financial_year": "2023",
@@ -323,7 +420,7 @@ app.post("/analyze", async (req, res) => {
     console.error(err);
     res.status(500).send("Error");
   }
-});
+});*/
 
 const jobs = {};
 
