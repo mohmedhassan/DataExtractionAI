@@ -407,6 +407,12 @@ app.post("/extract_pdf", upload.array("files", 1), async (req, res) => {
   }
 });
 
+app.get("/job/:id", (req, res) => {
+  const job = jobs[req.params.id];
+  if (!job) return res.status(404).json({ error: "not found" });
+  res.json(job);
+});
+
 app.get("/ping", (req, res) => {
   res.json({ ok: true });
 });
