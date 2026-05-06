@@ -12,7 +12,13 @@ import cors from "cors";
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+app.options('*', cors());
 
 const openai = new OpenAI({
   apiKey:process.env.OPENAI_API_KEY
@@ -325,7 +331,9 @@ app.post("/analyze", upload.array("files", 10), async (req, res) => {
 });
 
 
-app.post("/Extract_PDF", upload.array("files", 1), async (req, res) => {
+app.post("/extract_pdf", upload.array("files", 1), async (req, res) => {
+    req.setTimeout(120000);  // ← أضف السطر ده أول حاجة
+    res.setTimeout(120000);  // ← والسطر ده
   try {
     const files = req.files;
     const uploadedFiles = [];
