@@ -128,7 +128,7 @@ const autoFix = (item) => {
   }
 });*/
 
-app.post("/analyze", async (req, res) => {
+app.post("/analyze", upload.array("files"), async (req, res) => {
   try {
    const files = req.files;
 
