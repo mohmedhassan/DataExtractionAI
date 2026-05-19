@@ -79,7 +79,7 @@ const autoFix = (item) => {
 /* --------------------------
    API
 ---------------------------*/
-app.post("/analyze", upload.array("files", 10), async (req, res) => {
+/*app.post("/analyze", upload.array("files", 10), async (req, res) => {
   try {
     console.log("✅ /analyze called");
     console.log("Files received:", req.files?.length || 0);
@@ -126,11 +126,11 @@ app.post("/analyze", upload.array("files", 10), async (req, res) => {
       message: err.message
     });
   }
-});
+});*/
 
-/*app.post("/analyze", async (req, res) => {
+app.post("/analyze", async (req, res) => {
   try {
-   /* const files = req.files;
+   const files = req.files;
 
     const uploadedFiles = [];
     for (const file of files) {
@@ -139,9 +139,9 @@ app.post("/analyze", upload.array("files", 10), async (req, res) => {
         purpose: "assistants"
       });
       uploadedFiles.push(f.id);
-    }*/
+    }
 
-    /* const response = await openai.responses.create({
+    const response = await openai.responses.create({
        model: "gpt-5.4",
        input: [
          {
@@ -280,7 +280,7 @@ app.post("/analyze", upload.array("files", 10), async (req, res) => {
 
     // clean JSON
     let text = response.output_text;
-    let text = `{
+    /*let text = `{
   "company_name": "شركة الجزيرة للاستيراد والتصدير",
   "financial_year": "2023",
   "commercial_register": "24040",
@@ -359,7 +359,7 @@ app.post("/analyze", upload.array("files", 10), async (req, res) => {
     "total_expenses": [155000, 110000, 100000],
     "net_profit_loss_is": [1075000, 770000, 530000]
   }
-}`;
+}`;*/
     console.log(text);
     let clean = text.replace(/```json|```/g, "").trim();
 
@@ -370,7 +370,7 @@ app.post("/analyze", upload.array("files", 10), async (req, res) => {
     console.error(err);
     res.status(500).send("Error");
   }
-});*/
+});
 
 const jobs = {};
 
