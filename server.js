@@ -1,3 +1,5 @@
+import { File } from "node:buffer";
+if (!globalThis.File) globalThis.File = File;  // ← بيشيك الأول قبل ما يعمل override
 import express from "express";
 import multer from "multer";
 import OpenAI from "openai";
