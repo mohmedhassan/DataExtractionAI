@@ -1,6 +1,3 @@
-import { File } from "node:buffer";
-globalThis.File = File;
-
 import express from "express";
 import multer from "multer";
 import OpenAI from "openai";
@@ -79,58 +76,11 @@ const autoFix = (item) => {
 /* --------------------------
    API
 ---------------------------*/
-/*app.post("/analyze", upload.array("files", 10), async (req, res) => {
-  try {
-    console.log("✅ /analyze called");
-    console.log("Files received:", req.files?.length || 0);
 
-    const data = {
-      "company_name": "شركة الجزيرة للاستيراد والتصدير",
-      "financial_year": "2023",
-      "commercial_register": "24040",
-      "years": ["2023", "2022", "2021"],
-      "sales": [4920000, 3520000, 2510000],
-      "gross_profit": [1230000, 880000, 630000],
-      "net_profit": [1075000, 770000, 530000],
-      "total_assets": [1710000, 1190000, 1135000],
-      "total_liabilities": [250000, 220000, 200000],
-      "total_equity": [1400000, 920000, 885000],
-      "current_assets": [1560000, 1010000, 925000],
-      "current_liabilities": [250000, 220000, 200000],
-      "cash_flow_from_operations": [605000, 740000, -40000],
-      "roe": ["92.8%", "85.4%", "85.4%"],
-      "roa": ["74.3%", "66.3%", "66.3%"],
-      "leverage": ["17.9%", "23.9%", "22.6%"],
-      "balance_sheet": {
-        "total_assets_bs": [1710000, 1190000, 1135000],
-        "total_current_assets": [1560000, 1010000, 925000],
-        "total_equity_bs": [1400000, 920000, 885000],
-        "liabilities": [250000, 220000, 200000]
-      },
-      "income_statement": {
-        "year": ["2023", "2022", "2021"],
-        "total_sales_revenues": [4920000, 3520000, 2510000],
-        "cogs": [3690000, 2640000, 1880000],
-        "gross_profit_is": [1230000, 880000, 630000],
-        "total_expenses": [155000, 110000, 100000],
-        "net_profit_loss_is": [1075000, 770000, 530000]
-      }
-    };
-
-    return res.status(200).json(data);
-
-  } catch (err) {
-    console.error("❌ /analyze error:", err);
-    return res.status(500).json({
-      error: true,
-      message: err.message
-    });
-  }
-});*/
 
 app.post("/analyze", upload.array("files"), async (req, res) => {
   try {
-   const files = req.files;
+    const files = req.files;
 
     const uploadedFiles = [];
     for (const file of files) {
@@ -141,7 +91,7 @@ app.post("/analyze", upload.array("files"), async (req, res) => {
       uploadedFiles.push(f.id);
     }
 
-    const response = await openai.responses.create({
+     const response = await openai.responses.create({
        model: "gpt-5.4",
        input: [
          {
@@ -280,7 +230,7 @@ app.post("/analyze", upload.array("files"), async (req, res) => {
 
     // clean JSON
     let text = response.output_text;
-    /*let text = `{
+  /*  let text = `{
   "company_name": "شركة الجزيرة للاستيراد والتصدير",
   "financial_year": "2023",
   "commercial_register": "24040",
